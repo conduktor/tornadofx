@@ -506,7 +506,7 @@ class HttpClientResponse(override val request: HttpClientRequest, val response: 
 }
 
 inline fun <reified T : JsonModel> JsonObject.toModel(): T {
-    val model = T::class.java.newInstance()
+    val model = T::class.java.getDeclaredConstructor().newInstance()
     model.updateModel(this)
     return model
 }

@@ -101,7 +101,7 @@ internal class ApplicationListener(val context: BundleContext) : ServiceListener
 
     fun startDelegate(provider: ApplicationProvider) {
         ensureFxRuntimeInitialized()
-        delegate = provider.application.java.newInstance()
+        delegate = provider.application.java.getDeclaredConstructor().newInstance()
         if (realPrimaryStage == null) {
             print("Waiting for Primary Stage to be initialized")
             while (realPrimaryStage == null) {

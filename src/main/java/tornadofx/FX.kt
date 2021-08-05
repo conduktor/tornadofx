@@ -294,7 +294,7 @@ class FX {
             } else {
                 val noArgsConstructor = obsolete.javaClass.constructors.any { it.parameterCount == 0 }
                 if (noArgsConstructor) {
-                    replacement = obsolete.javaClass.newInstance()
+                    replacement = obsolete.javaClass.getDeclaredConstructor().newInstance()
                 } else {
                     log.warning("Unable to reload $obsolete because it's missing a no args constructor")
                     return
@@ -434,7 +434,7 @@ fun <T : Component> find(type: KClass<T>, scope: Scope = FX.defaultScope, params
         if (!components.containsKey(type as KClass<out ScopedInstance>)) {
             synchronized(FX.lock) {
                 if (!components.containsKey(type)) {
-                    val cmp = type.java.newInstance()
+                    val cmp = type.java.getDeclaredConstructor().newInstance()
                     (cmp as? UIComponent)?.init()
                     // if cmp.scope overrode the scope, inject into that instead
                     if (cmp is Component && cmp.scope != useScope) {
@@ -449,7 +449,7 @@ fun <T : Component> find(type: KClass<T>, scope: Scope = FX.defaultScope, params
         return cmp
     }
 
-    val cmp = type.java.newInstance()
+    val cmp = type.java.getDeclaredConstructor().newInstance()
     cmp.paramsProperty.value = stringKeyedMap
     (cmp as? Fragment)?.init()
 
@@ -503,9 +503,8 @@ fun EventTarget.addChildIfPossible(node: Node, index: Int? = null) {
     if (this is Node) {
         val target = builderTarget
         if (target != null) {
-            // Trick to get around the disallowed use of invoke on out projected types
-            @Suppress("UNNECESSARY_NOT_NULL_ASSERTION")
-            target!!(this).value = node
+            @Suppress("UNCHECKED_CAST")
+            (target as ((Node) -> ObjectProperty<Node>)).invoke(this).value = node
             return
         }
     }

@@ -118,7 +118,7 @@ open class App(open val primaryView: KClass<out UIComponent> = NoPrimaryViewSpec
     private fun detectDiContainerArgument() {
         parameters?.named?.get("di-container")?.let { diContainerClassName ->
             val dic = try {
-                Class.forName(diContainerClassName).newInstance()
+                Class.forName(diContainerClassName).getDeclaredConstructor().newInstance()
             } catch (ex: Exception) {
                 log.warning("Unable to instantiate --di-container=$diContainerClassName: ${ex.message}")
                 null

@@ -63,7 +63,7 @@ open class Form : VBox() {
     }
 
     internal fun labelContainerWidth(height: Double): Double
-            = fieldsets.flatMap { it.fields }.map { it.labelContainer }.map { f -> f.prefWidth(-height) }.max() ?: 0.0
+            = fieldsets.flatMap { it.fields }.map { it.labelContainer }.map { f -> f.prefWidth(-height) }.maxOrNull() ?: 0.0
 
     internal val fieldsets = HashSet<Fieldset>()
 
@@ -232,7 +232,7 @@ class Field(text: String? = null, orientation: Orientation = HORIZONTAL, forceLa
 
     init {
         inputContainer.addClass(Stylesheet.inputContainer)
-        inputContainer.addPseudoClass(orientation.name.toLowerCase())
+        inputContainer.addPseudoClass(orientation.name.lowercase())
         children.add(inputContainer)
 
         // Register/deregister with parent Fieldset

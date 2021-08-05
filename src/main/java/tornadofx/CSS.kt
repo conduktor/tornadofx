@@ -509,7 +509,7 @@ open class PropertyHolder {
             is MultiValue<*> -> value.elements.joinToString { toCss(it) }
             is CssBox<*> -> "${toCss(value.top)} ${toCss(value.right)} ${toCss(value.bottom)} ${toCss(value.left)}"
             is FontWeight -> "${value.weight}"  // Needs to come before `is Enum<*>`
-            is Enum<*> -> value.toString().toLowerCase().replace("_", "-")
+            is Enum<*> -> value.toString().lowercase().replace("_", "-")
             is Font -> "${if (value.style == "Regular") "normal" else value.style} ${value.size}pt ${toCss(value.family)}"
             is Cursor -> if (value is ImageCursor) {
                 value.image.javaClass.getDeclaredField("url").let {
@@ -1242,7 +1242,7 @@ val fiveDigits = DecimalFormat("#.#####", DecimalFormatSymbols.getInstance(Local
 
 val Color.css: String get() = "rgba(${(red * 255).toInt()}, ${(green * 255).toInt()}, ${(blue * 255).toInt()}, ${fiveDigits.format(opacity)})"
 
-internal fun String.camelToSnake() = (get(0).toLowerCase() + substring(1)).replace(CssRule.upperCaseRegex, "-$1").toLowerCase()
+internal fun String.camelToSnake() = (get(0).lowercaseChar() + substring(1)).replace(CssRule.upperCaseRegex, "-$1").lowercase()
 internal fun String.cssValidate() = if (matches(CssRule.nameRegex)) this else throw IllegalArgumentException("Invalid CSS Name: $this")
 internal fun String.toSelector() = CssSelector(*split(CssRule.splitter).map(String::toRuleSet).toTypedArray())
 internal fun String.toRuleSet() = if (matches(CssRule.ruleSetRegex)) {

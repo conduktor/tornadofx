@@ -12,6 +12,7 @@ import java.util.concurrent.Callable
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.*
 import kotlin.reflect.jvm.javaMethod
+import java.util.Locale
 
 fun <T> ViewModel.property(value: T? = null) = PropertyDelegate(SimpleObjectProperty<T>(this, "ViewModelProperty", value))
 fun <T> property(value: T? = null) = PropertyDelegate(SimpleObjectProperty<T>(value))
@@ -84,7 +85,7 @@ fun <S, T> observable(owner: S, prop: KProperty1<S, T>): ReadOnlyObjectProperty<
  * Example: val observableName = observable(myPojo, MyPojo::getName, MyPojo::setName)
  */
 fun <S : Any, T> observable(bean: S, getter: KFunction<T>, setter: KFunction2<S, T, Unit>): PojoProperty<T> {
-    val propName = getter.name.substring(3).decapitalize()
+    val propName = getter.name.substring(3).replaceFirstChar { it.lowercase(Locale.getDefault()) }
 
     return object : PojoProperty<T>(bean, propName) {
         override fun get() = getter.call(bean)
@@ -123,7 +124,7 @@ fun <S : Any, T : Any> S.observable(
 ): ObjectProperty<T> {
     if (getter == null && propertyName == null) throw AssertionError("Either getter or propertyName must be provided")
     val propName = propertyName
-            ?: getter?.name?.substring(3)?.decapitalize()
+            ?: getter?.name?.substring(3)?.replaceFirstChar { it.lowercase(Locale.getDefault()) }
 
     return JavaBeanObjectPropertyBuilder.create().apply {
         bean(this@observable)

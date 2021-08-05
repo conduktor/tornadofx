@@ -56,19 +56,19 @@ class SqueezeBox(multiselect: Boolean = true, fillHeight: Boolean = false) : Con
 class SqueezeBoxSkin(val control: SqueezeBox) : SkinBase<SqueezeBox>(control) {
 
     override fun computeMinHeight(width: Double, topInset: Double, rightInset: Double, bottomInset: Double, leftInset: Double): Double {
-        return children.sumByDouble { it.minHeight(width) } + topInset + bottomInset
+        return children.sumOf { it.minHeight(width) } + topInset + bottomInset
     }
 
     override fun computePrefHeight(width: Double, topInset: Double, rightInset: Double, bottomInset: Double, leftInset: Double): Double {
-        return children.sumByDouble { it.prefHeight(width) } + topInset + bottomInset
+        return children.sumOf { it.prefHeight(width) } + topInset + bottomInset
     }
 
     override fun computeMinWidth(height: Double, topInset: Double, rightInset: Double, bottomInset: Double, leftInset: Double): Double {
-        return children.mapEach { minWidth(height) }.max() ?: 0.0 + leftInset + rightInset
+        return children.mapEach { minWidth(height) }.maxOrNull() ?: (0.0 + leftInset + rightInset)
     }
 
     override fun computePrefWidth(height: Double, topInset: Double, rightInset: Double, bottomInset: Double, leftInset: Double): Double {
-        return children.mapEach { prefWidth(height) }.max() ?: 0.0 + leftInset + rightInset
+        return children.mapEach { prefWidth(height) }.maxOrNull() ?: (0.0 + leftInset + rightInset)
     }
 
     override fun layoutChildren(contentX: Double, contentY: Double, contentWidth: Double, contentHeight: Double) {

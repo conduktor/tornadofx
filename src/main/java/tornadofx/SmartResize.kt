@@ -449,7 +449,7 @@ fun <K> Map<K,Collection<*>>.countValues(key: K) = this[key]?.size ?: 0
 
 
 private fun GroupedColumns.totalWeightOfWeightedColumns() = this[Weight::class]?.run {
-    map { it.resizeType as ResizeType.Weight }.sumByDouble { it.weight as Double }
+    map { it.resizeType as ResizeType.Weight }.sumOf { it.weight as Double }
 } ?: 0.0
 
 

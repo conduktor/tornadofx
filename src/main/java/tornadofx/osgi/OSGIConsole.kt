@@ -81,7 +81,7 @@ class OSGIConsole : View() {
                 }
 
                 setOnDragDropped { event ->
-                    if (event.dragboard.hasFiles() && event.dragboard.files.first().name.toLowerCase().endsWith(".jar")) {
+                    if (event.dragboard.hasFiles() && event.dragboard.files.first().name.lowercase().endsWith(".jar")) {
                         event.dragboard.files.forEach {
                             fxBundleContext.installBundle("file:${it.absolutePath}")
                         }
