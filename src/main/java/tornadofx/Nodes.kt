@@ -852,22 +852,6 @@ fun EventTarget.removeFromParent() {
     }
 }
 
-/**
- * Listen for changes to an observable value and replace all content in this Node with the
- * new content created by the onChangeBuilder. The builder operates on the node and receives
- * the new value of the observable as it's only parameter.
- *
- * The onChangeBuilder is run immediately with the current value of the property.
- */
-fun <S : EventTarget, T> S.dynamicContent(property: ObservableValue<T>, onChangeBuilder: S.(T?) -> Unit) {
-    val onChange: (T?) -> Unit = {
-        getChildList()?.clear()
-        onChangeBuilder(this@dynamicContent, it)
-    }
-    property.onChange(onChange)
-    onChange(property.value)
-}
-
 const val TRANSITIONING_PROPERTY = "tornadofx.transitioning"
 /**
  * Whether this node is currently being used in a [ViewTransition]. Used to determine whether it can be used in a
